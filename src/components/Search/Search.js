@@ -1,7 +1,7 @@
 import React from "react";
 import Form from "../Form/Form";
 import axios from "axios";
-import { API_KEY } from "../../helpers";
+import { API_KEY } from "../../helpers/helpers";
 import { useState, useEffect } from "react";
 import Article from "../Article/Article";
 import List from "@mui/material/List";
