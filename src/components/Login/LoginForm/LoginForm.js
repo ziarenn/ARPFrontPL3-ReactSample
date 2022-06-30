@@ -2,6 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+import { auth } from "../../../helpers/firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   const {
@@ -12,7 +14,7 @@ const Login = () => {
 
   const submitHandler = (data) => {
     console.log(data);
-    
+    signInWithEmailAndPassword(auth, data.email, data.password).then(creds => console.log(creds.user))
   };
 
   return (

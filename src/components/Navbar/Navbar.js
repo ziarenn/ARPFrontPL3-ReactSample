@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,9 +11,29 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-
-const Navbar = () => {
+import { auth, storage } from "../../helpers/firebaseConfig";
+import { ref, getDownloadURL } from "firebase/storage";
+const Navbar = ({ loggedIn }) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(
+    "/static/images/avatar/2.jpg"
+  );
+
+  useEffect(() => {
+    if (loggedIn) {
+      const profilePhotoRef = ref(
+        storage,
+        `gs://arpfrontpl3-react.appspot.com/users/${auth.currentUser.uid}/profile`
+      );
+      getDownloadURL(profilePhotoRef)
+        .then((url) => {
+          setProfilePhoto(url);
+        })
+        .catch((err) => {
+          setProfilePhoto(null);
+        });
+    }
+  }, [loggedIn]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -142,10 +162,27 @@ const Navbar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              <IconButton sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+            <Link
+              to={`${loggedIn ? "/user" : "/login"}`}
+              style={{ textDecoration: "none" }}
+            >
+              {/* jeżeli użytkownik jest zalogowany to wyświetl icon button, src avatara ustaw na obrazek z fb storage*/}
+              {loggedIn ? (
+                <IconButton sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src={profilePhoto} />
+                </IconButton>
+              ) : (
+                <Button
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    textDecoration: "none",
+                  }}
+                >
+                  Log in
+                </Button>
+              )}
             </Link>
           </Box>
         </Toolbar>

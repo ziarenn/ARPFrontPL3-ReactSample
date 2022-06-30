@@ -20,10 +20,12 @@ const Register = () => {
         .then((userCredential) => {
           console.log("Success");
           //BUG
-          window.location.href = `${window.document.URL.split("/")[0]}/`;
+          // window.location.href = `${window.document.URL.split("/")[0]}/`;
           //BUG
+          // stan do wyswietlenia przycisku go back to the home page z linkiem do routa
         })
         .catch((err) => console.log(err.message));
+        // wyswietlenie spana z erorrem
     } else {
       console.log("Passwords do not match!");
     }
